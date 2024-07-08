@@ -2,29 +2,29 @@
 #'
 #' Maximum likelihood estimation of the contaminated negative binomial regression model via an Expectation-Maximization algorithm.
 #'
-#' @param formula an object of class 'formula': a symbolic description of the model to be fitted. The details of model specification are given under 'Details'
+#' @param formula an object of class 'formula': a symbolic description of the model to be fitted. 
 #' @param data a mandatory data frame containing the variables in the model.
-#' @param start vector of initial values. If NULL, then values produced by glm.nb are used as initial values with delta=0.05 and eta=1.1
+#' @param start vector of initial values. If NULL, then values produced by glm.nb are used as initial values with delta=0.05 and eta=1.1.
 #' @param method optimization method to be used. Default is "BFGS". Other options are "Nelder-Mead".
-#' @param reltol relative convergence tolerance in each optimization process. Defaults to 1e-15
-#' @param maxit the number of inner iterations in each optimization process. Defaults to 10000
+#' @param reltol relative convergence tolerance in each optimization process. Defaults to 1e-15.
+#' @param maxit the number of inner iterations in each optimization process. Defaults to 10000.
 #' @param em.tol  the EM convergence tolerance. Defaults to 1e-10.
-#' @param em.maxit  the number of EM iterations. Defaults to 1000
+#' @param em.maxit  the number of EM iterations. Defaults to 1000.
 #'
 #' @details The \code{ml.cnb} function fits the contaminated negative binomial regression model (see Otto et. al (2024)). 
 #'
 #' @return An list of elements:
 #'    \item{results}{A data frame with parameter estimates and standard errors. }
-#'    \item{alpha}{Maximum likelihood estimate of alpha}
-#'    \item{delta}{Maximum likelihood estimate of delta}
-#'    \item{beta}{Maximum likelihood estimates of the regression coefficients}
-#'    \item{mu}{Mamimum likelihood estimates of the mean paramter}
-#'    \item{X}{The design matrix used in the model}
-#'    \item{y}{The response variable}
-#'    \item{loglike}{The log-lijekihood value at convergence}
-#'    \item{AIC}{Akaike Information Criterion (AIC) for the fitted model}
-#'    \item{BIC}{Bayesian Information Criterion (BIC) for the fitted model}
-#'    \item{LRpvalue}{p-value of Likelihood Ratio test}
+#'    \item{alpha}{Maximum likelihood estimate of alpha.}
+#'    \item{delta}{Maximum likelihood estimate of delta.}
+#'    \item{beta}{Maximum likelihood estimates of the regression coefficients.}
+#'    \item{mu}{Minimum likelihood estimates of the mean paramter.}
+#'    \item{X}{The design matrix used in the model.}
+#'    \item{y}{The response variable.}
+#'    \item{loglike}{The log-likelihood value at convergence.}
+#'    \item{AIC}{Akaike Information Criterion (AIC) for the fitted model.}
+#'    \item{BIC}{Bayesian Information Criterion (BIC) for the fitted model.}
+#'    \item{LRpvalue}{p-value of Likelihood Ratio test.}
 #'
 #' @import MASS
 #' 
@@ -84,6 +84,7 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
     beta.hat <- fit$par
     start[1] <- exp(beta.hat[1])
     start[2] <- exp(beta.hat[2])+1
+    start[3:(ncol(mf)+2)] <- beta.hat[-c(1:2)]
     beta <- beta.hat[(3:length(beta.hat))]
     mu.start <- exp(nb2X %*% beta)
     lc=sum(dcnbinom(y, mu=mu.start, alpha = start[1], delta=delta, eta=start[2], log = T))

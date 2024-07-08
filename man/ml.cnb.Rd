@@ -16,35 +16,35 @@ ml.cnb(
 )
 }
 \arguments{
-\item{formula}{an object of class 'formula': a symbolic description of the model to be fitted. The details of model specification are given under 'Details'}
+\item{formula}{an object of class 'formula': a symbolic description of the model to be fitted.}
 
 \item{data}{a mandatory data frame containing the variables in the model.}
 
-\item{start}{vector of initial values. If NULL, then values produced by glm.nb are used as initial values with delta=0.05 and eta=1.1}
+\item{start}{vector of initial values. If NULL, then values produced by glm.nb are used as initial values with delta=0.05 and eta=1.1.}
 
 \item{method}{optimization method to be used. Default is "BFGS". Other options are "Nelder-Mead".}
 
-\item{reltol}{relative convergence tolerance in each optimization process. Defaults to 1e-15}
+\item{reltol}{relative convergence tolerance in each optimization process. Defaults to 1e-15.}
 
-\item{maxit}{the number of inner iterations in each optimization process. Defaults to 10000}
+\item{maxit}{the number of inner iterations in each optimization process. Defaults to 10000.}
 
 \item{em.tol}{the EM convergence tolerance. Defaults to 1e-10.}
 
-\item{em.maxit}{the number of EM iterations. Defaults to 1000}
+\item{em.maxit}{the number of EM iterations. Defaults to 1000.}
 }
 \value{
 An list of elements:
 \item{results}{A data frame with parameter estimates and standard errors. }
-\item{alpha}{Maximum likelihood estimate of alpha}
-\item{delta}{Maximum likelihood estimate of delta}
-\item{beta}{Maximum likelihood estimates of the regression coefficients}
-\item{mu}{Mamimum likelihood estimates of the mean paramter}
-\item{X}{The design matrix used in the model}
-\item{y}{The response variable}
-\item{loglike}{The log-lijekihood value at convergence}
-\item{AIC}{Akaike Information Criterion (AIC) for the fitted model}
-\item{BIC}{Bayesian Information Criterion (BIC) for the fitted model}
-\item{LRpvalue}{p-value of Likelihood Ratio test}
+\item{alpha}{Maximum likelihood estimate of alpha.}
+\item{delta}{Maximum likelihood estimate of delta.}
+\item{beta}{Maximum likelihood estimates of the regression coefficients.}
+\item{mu}{Minimum likelihood estimates of the mean paramter.}
+\item{X}{The design matrix used in the model.}
+\item{y}{The response variable.}
+\item{loglike}{The log-likelihood value at convergence.}
+\item{AIC}{Akaike Information Criterion (AIC) for the fitted model.}
+\item{BIC}{Bayesian Information Criterion (BIC) for the fitted model.}
+\item{LRpvalue}{p-value of Likelihood Ratio test.}
 }
 \description{
 Maximum likelihood estimation of the contaminated negative binomial regression model via an Expectation-Maximization algorithm.

@@ -2,8 +2,8 @@
 #'
 #' Density function of contaminated negative binomial distribution
 #'
-#' @param x vector of (non negative integer) quantities
-#' @param mu mean parameter. mu > 0
+#' @param x vector of (non negative integer) quantities.
+#' @param mu mean parameter. mu > 0.
 #' @param alpha dispersion parameter. alpha > 0.
 #' @param delta proportion of mild outliers (bad points). 0 < delta < 1.
 #' @param eta inflation parameter. eta > 1.
@@ -15,8 +15,7 @@
 #' }
 #' for, \eqn{x=0,1,\dots}, \eqn{\mu>0, \alpha>0, 0<\delta<1} and \eqn{\eta>1}. 
 #'
-#' @return An list of elements:
-#'    \item{d}{The density of the contaminated negative binomial distribution }
+#' @return The density of the contaminated negative binomial distribution.
 #'    
 #'
 #' @import stats

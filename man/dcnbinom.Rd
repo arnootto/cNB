@@ -7,9 +7,9 @@
 dcnbinom(x, mu, alpha, delta, eta, log = F)
 }
 \arguments{
-\item{x}{vector of (non negative integer) quantities}
+\item{x}{vector of (non negative integer) quantities.}
 
-\item{mu}{mean parameter. mu > 0}
+\item{mu}{mean parameter. mu > 0.}
 
 \item{alpha}{dispersion parameter. alpha > 0.}
 
@@ -20,8 +20,7 @@ dcnbinom(x, mu, alpha, delta, eta, log = F)
 \item{log}{loglical; if True probabilities p are given as log(p). Default is False.}
 }
 \value{
-An list of elements:
-\item{d}{The density of the contaminated negative binomial distribution }
+The density of the contaminated negative binomial distribution.
 }
 \description{
 Density function of contaminated negative binomial distribution
