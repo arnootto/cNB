@@ -1,8 +1,7 @@
 Package: cNB
 Title: The contaminated negative binomial model
 Version: 0.1
-Authors@R: c(
-    person("Arno", "Otto", email = "arno.otto@up.ac.za", role = "aut"),
+Authors@R: c(    person("Arno", "Otto", email = "arno.otto@up.ac.za", role = "aut"),
     person("Johan", "Ferreira"),
     person("Salvatore D", "Tomarchio"),
     person("Andriëtte", " Bekker"),
