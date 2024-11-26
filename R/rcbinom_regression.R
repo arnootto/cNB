@@ -12,7 +12,7 @@
 #' @import MASS
 #'
 #' @export
- rnbinom.regression <- function(n = 1, off = 0,
+ rnbinom_regression <- function(n = 1, off = 0,
                                alpha = 0.5,
                                xv = c(1, 0.75, -1.5)) {
   p <- length(xv) - 1
