@@ -1,12 +1,15 @@
 Package: cNB
 Title: The contaminated negative binomial model
 Version: 0.1
-Authors: Arno Otto <arno.otto@up.ac.za>
-          Johan Ferreira
-          Salvatore Tomarchio
-          Andriëtte Bekker
-          Antonio Punzo
+Authors: Authors@R: c(
+    person("Arno", "Otto", email = "arno.otto@up.ac.za", role = "author"),
+    person("Johan", "Ferreira"),
+    person("Salvatore D", "Tomarchio"),
+    person("Andriëtte", " Bekker"),
+    person("Antonio, Punzo"))
 Description: This package fits the contaminated negative biomial regression model via an EM-algorithm.
+URL: https://github.com/arnootto/cNB
+Imports: MASS, COUNT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
