@@ -2,7 +2,7 @@
 #'
 #' Maximum likelihood estimation of the contaminated negative binomial regression model via an Expectation-Maximization algorithm.
 #'
-#' @param formula an object of class 'formula': a symbolic description of the model to be fitted. 
+#' @param formula an object of class 'formula': a symbolic description of the model to be fitted.
 #' @param data a mandatory data frame containing the variables in the model.
 #' @param start vector of initial values. If NULL, then values produced by glm.nb are used as initial values with delta=0.05 and eta=1.1.
 #' @param method optimization method to be used. Default is "BFGS". Other options are "Nelder-Mead".
@@ -11,7 +11,7 @@
 #' @param em.tol  the EM convergence tolerance. Defaults to 1e-10.
 #' @param em.maxit  the number of EM iterations. Defaults to 1000.
 #'
-#' @details The \code{ml.cnb} function fits the contaminated negative binomial regression model (see Otto et. al (2024)). 
+#' @details The \code{ml.cnb} function fits the contaminated negative binomial regression model (see Otto et. al (2024)).
 #'
 #' @return An list of elements:
 #'    \item{results}{A data frame with parameter estimates and standard errors. }
@@ -27,12 +27,12 @@
 #'    \item{LRpvalue}{p-value of Likelihood Ratio test.}
 #'
 #' @import MASS
-#' 
-#' 
 #'
-#' @export 
+#'
+#'
+#' @export
 
-ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, maxit=10000, em.tol=1e-5, em.maxit=1000) {
+ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, maxit=10000, em.tol=1e-5, em.maxit=1000, hessian = TRUE) {
   mf <- model.frame(formula, data)
   mt <- attr(mf, "terms")
   y <- model.response(mf, "numeric")
@@ -48,16 +48,16 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
   }
   if (is.null(start)) {#initial param
     nb <-MASS::glm.nb(formula = formula, data = data, control = glm.control(maxit=25))
-    start <- matrix(NA,(ncol(mf)+2),1)
+    start <- matrix(NA,(ncol(nb2X)+2),1)
     start[1] <- 1/nb$theta #alpha
     start[2] <- 2 # eta
-    start[3:(ncol(mf)+2)] <- nb$coefficients
+    start[3:(ncol(nb2X)+2)] <- nb$coefficients
     xb.start <- nb2X %*% start[-c(1:2)] #coefficients
     mu.start <- exp(xb.start) #link
     nbloglik <- logLik(nb)[1] #loglikelihood of nb
     nbterms <- length(coefficients(nb)) #number of parameters of nb
   }
-  delta=0.05  
+  delta=0.05
   loglik    <- NULL
   cond=F
   i=1
@@ -84,7 +84,7 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
     beta.hat <- fit$par
     start[1] <- exp(beta.hat[1])
     start[2] <- exp(beta.hat[2])+1
-    start[3:(ncol(mf)+2)] <- beta.hat[-c(1:2)]
+    start[3:(ncol(nb2X)+2)] <- beta.hat[-c(1:2)]
     beta <- beta.hat[(3:length(beta.hat))]
     mu.start <- exp(nb2X %*% beta)
     lc=sum(dcnbinom(y, mu=mu.start, alpha = start[1], delta=delta, eta=start[2], log = T))
@@ -92,14 +92,14 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
     #print(i)
     if(abs(loglik[i]-loglik[i-1])<em.tol||i>=em.maxit){
       cond=T
-      
+
     }
   }
-  
+
   beta.hat <- fit$par
   beta.hat[1] <- exp(beta.hat[1])
   beta.hat[2] <- exp(beta.hat[2])+1
-  
+
   par <-c(beta.hat,delta)
   dcnbinomHess<-function(X, par, y,log=F){
     alpha <- par[1] #alpha
@@ -107,7 +107,7 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
     xb.hat <- X %*% par[-c(1:2,length(par))] #coefficients
     mu <- exp(xb.hat) #link
     delta <- par[length(par)]
-    
+
     log_term1 = log(1-delta) + dnbinom(y, size = 1/alpha, mu = mu, log = T)
     log_term2 = log(delta) + dnbinom(y, size = 1/(alpha*eta), mu = mu, log = T)
     d = (exp(log_term1) + exp(log_term2))
@@ -117,15 +117,20 @@ ml.cnb <- function(formula, data, start = NULL, method = "BFGS", reltol=1e-15, m
       return(sum(log(d)))
     }
   }
+  if (hessian == TRUE){
   Hess=optimHess(par=par,fn=dcnbinomHess,log=T, X=nb2X, y=y,control = list(
     fnscale = -1,
     maxit = maxit,
     reltol = reltol))
   se.beta.hat <- sqrt(diag(solve(-Hess)))
-  
+
   results <- data.frame(Estimate = cbind(c(beta.hat,delta),se.beta.hat))
   rownames(results) <- c("alpha", "eta", colnames(nb2X),"delta")
   colnames(results) <- c("estimates", "se")
+  } else {
+    results <- data.frame(estimates = c(beta.hat, delta))
+    rownames(results) <- c("alpha", "eta", colnames(nb2X), "delta")
+  }
   alpha <- beta.hat[1];  eta <- beta.hat[2]
   beta <- beta.hat[(3:length(beta.hat))]; delta <- delta
   mu <- exp(nb2X %*% beta)
